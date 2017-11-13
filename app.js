@@ -59,7 +59,7 @@ console.log(countryIconElement);
 //functions
 function sortTable(column) {
   var num = { country: 0, capital: 1, population: 2}
-  var switching = true, asc = true, shouldSwitch = false;
+  var switching = true, asc = true, shouldSwitch, x, y, i;
   var row;
 
   while(switching) {
@@ -67,37 +67,35 @@ function sortTable(column) {
     row = document.querySelector('tbody').children;
     // console.log(row);
     for (var i = 0; i < row.length -1; i++) {
-      var x = row[i].children[num[column]];
-      var y = row[i+1].children[num[column]];
+      shouldSwitch = false;
+      x = row[i].children[num[column]];
+      y = row[i+1].children[num[column]];
       console.log(x);
       if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-        row[i].parentNode.insertBefore(row[i+1], row[i]);
-      } 
+        shouldSwitch = true;
+        break;
+      }
     }
-
-
+    if(shouldSwitch) {
+      row[i].parentNode.insertBefore(row[i+1], row[i]);
+      switching = true;
+    }
   }
-
-
 }
-
-
-
 
 
 //events
 countryIconElement.addEventListener('click', (event) => {
   event.preventDefault();
   sortTable('country');
-  console.log(event.target.className.split(' ')[2].trim());
 })
 
 capitalIconElement.addEventListener('click', (event) => {
   event.preventDefault();
-  console.log(event.target.className.split(' ')[2].trim());
+  sortTable('capital');
 })
 
 populationIconElement.addEventListener('click', (event) => {
   event.preventDefault();
-  console.log(event.target.className.split(' ')[2].trim());
+  sortTable('population');
 })
