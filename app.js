@@ -18,18 +18,21 @@ var newRow = header.insertRow(0);
 var headerTitles = Object.keys(data[0]);
 
 var newTBody = document.createElement('tbody');
-var iconElement, countryIconElement, capitalIconElement, populationIconElement;
+var iconElement, iconElements, capitalIconElement, populationIconElement;
 
 //creating header
 headerTitles.forEach((title) => {
   var tdCell = document.createElement('td');
   var textNode = document.createTextNode(title.toUpperCase());
   var sortIcon = document.createElement('i');
-  sortIcon.setAttribute('class', 'fa fa-sort ' + title);
+  var sortIconDesc = document.createElement('i');
+  sortIcon.setAttribute('class', 'fa fa-sort-alpha-asc ' + title);
+  sortIconDesc.setAttribute('class', 'fa fa-sort-alpha-desc ' + title + 'desc');
   sortIcon.setAttribute('aria-hidden', 'true');
   header.setAttribute('class', 'tableHeader');
   tdCell.appendChild(textNode);
   tdCell.appendChild(sortIcon);
+  tdCell.appendChild(sortIconDesc);
   newRow.appendChild(tdCell);
 });
 
@@ -52,10 +55,7 @@ tableElement.appendChild(newTBody);
 
 //table appended to container in dom
 tableContainerElement.appendChild(tableElement);
-countryIconElement = document.querySelector('.country');
-capitalIconElement = document.querySelector('.capital');
-populationIconElement = document.querySelector('.population');
-console.log(countryIconElement);
+
 //functions
 function sortTable(column) {
   var num = { country: 0, capital: 1, population: 2}
@@ -65,12 +65,12 @@ function sortTable(column) {
   while(switching) {
     switching = false;
     row = document.querySelector('tbody').children;
-    // console.log(row);
+
     for (var i = 0; i < row.length -1; i++) {
       shouldSwitch = false;
       x = row[i].children[num[column]];
       y = row[i+1].children[num[column]];
-      console.log(x);
+
       if(x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
         shouldSwitch = true;
         break;
@@ -83,19 +83,47 @@ function sortTable(column) {
   }
 }
 
+function descSortTable(column) {
+  var num = { country: 0, capital: 1, population: 2}
+  var switching = true, shouldSwitch, x, y, i;
+  var row;
+
+  while(switching) {
+    switching = false;
+    row = document.querySelector('tbody').children;
+
+    for (var i = 0; i < row.length -1; i++) {
+      shouldSwitch = false;
+      x = row[i].children[num[column]];
+      y = row[i+1].children[num[column]];
+
+      if(x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+        shouldSwitch = true;
+        break;
+      }
+    }
+    if(shouldSwitch) {
+      row[i].parentNode.insertBefore(row[i+1], row[i]);
+      switching = true;
+    }
+  }
+}
 
 //events
-countryIconElement.addEventListener('click', (event) => {
+document.addEventListener('click', (event) => {
   event.preventDefault();
-  sortTable('country');
-})
-
-capitalIconElement.addEventListener('click', (event) => {
-  event.preventDefault();
-  sortTable('capital');
-})
-
-populationIconElement.addEventListener('click', (event) => {
-  event.preventDefault();
-  sortTable('population');
+  var eventTargetTrimmed = event.target.className.split(' ')[2].trim()
+  if(eventTargetTrimmed === 'country') {
+    sortTable('country');
+  } else if(eventTargetTrimmed === 'countrydesc') {
+    descSortTable('country');
+  } else if(eventTargetTrimmed === 'population') {
+      sortTable('population');
+  } else if(eventTargetTrimmed === 'populationdesc') {
+    descSortTable('population');
+  } else if(eventTargetTrimmed === 'capital') {
+      sortTable('capital');
+  } else if(eventTargetTrimmed === 'capitaldesc') {
+    descSortTable('capital');
+  }
 })
