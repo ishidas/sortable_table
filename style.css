@@ -4,3 +4,11 @@
 .tableHeader {
   font-weight: bold;
 }
+
+table {
+  border: 2px solid black;
+}
+
+h2 {
+  color: brown;
+}
