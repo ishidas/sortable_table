@@ -1,14 +1,37 @@
 /**
   Basic style for html
 **/
+body, html {
+  height: 100%;
+}
 .tableHeader {
   font-weight: bold;
 }
 
 table {
+  margin: 0 auto;
   border: 2px solid black;
+  background: #d0d0d0;
 }
 
 h2 {
-  color: brown;
+  display: inline-block;
+  position: fixed;
+  width: 100%;
+  top: 8%;
+  text-align: center;
+}
+
+body {
+  height: 100%;
+  background-repeat: no-repeat;
+  background-image: url(./kelly-sikkema-172068.jpg);
+  background-position: center;
+  background-size: cover;
+}
+
+.tableContainer {
+  position: absolute;
+  width: 100%;
+  top: 36%;
 }
